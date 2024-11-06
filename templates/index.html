@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hämta Trafikdata från Trafikverket</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .total-situations {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #categoryChart {
+            max-width: 300px;
+            max-height: 300px;
+            margin: auto;
+        }
+    </style>
+    <script>
+        let categoryChartInstance = null;
+
+        function calculateStartTime(daysBack) {
+            const today = new Date();
+            today.setDate(today.getDate() - daysBack);
+            return today.toISOString().split('T')[0];
+        }
+
+        async function fetchData() {
+            const daysBack = document.getElementById('days-back').value;
+            const startTime = calculateStartTime(daysBack);
+
+            const response = await fetch(`/get_data?start_time=${startTime}`);
+            const data = await response.json();
+            
+            const summaryContainer = document.getElementById('summary');
+            summaryContainer.innerHTML = `
+                <p class="total-situations">Totalt antal situationer: ${data.total_situations}</p>
+                <h3>Antal per kategori:</h3>
+                <ul>
+                    ${Object.entries(data.message_type_counts).map(([type, count]) => `<li>${type}: ${count}</li>`).join('')}
+                </ul>
+            `;
+
+            // Skapa eller uppdatera cirkeldiagram för Kategori
+            createChart(data.message_type_counts);
+        }
+
+        function createChart(messageTypeCounts) {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            const labels = Object.keys(messageTypeCounts);
+            const data = Object.values(messageTypeCounts);
+
+            // Förstör den gamla diagraminstansen om den existerar
+            if (categoryChartInstance !== null) {
+                categoryChartInstance.destroy();
+            }
+
+            // Skapa en ny instans av diagrammet
+            categoryChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Antal per kategori',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Antal per kategori'
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Hämta Trafikdata från Trafikverket</h1>
+    <label for="days-back">Antal dagar bakåt:</label>
+    <input type="number" id="days-back" value="7">
+    
+    <button onclick="fetchData()">Get Data</button>
+    <div id="summary"></div>
+    <canvas id="categoryChart"></canvas>
+</body>
+</html>
