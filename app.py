@@ -1,10 +1,14 @@
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
-from helpers.get_data import _get_trafikverket_data
-import logging 
+from helpers.get_data import get_trafikverket_data
+from helpers.filter_data import filter_trafikverket_data
+from dotenv import load_dotenv
+import logging
 
 app = Flask(__name__)
 CORS(app)
+
+load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
 @app.route('/')
@@ -17,12 +21,19 @@ def get_data():
     logging.info(f'Received request for get_data with start_time: {start_time}')
     
     try:
-        data = _get_trafikverket_data(start_time=start_time)
-        if data:
-            logging.info('Data retrieved successfully')
+        # Steg 1: Hämta rådata från API
+        raw_data = get_trafikverket_data()
+        
+        if raw_data:
+            logging.info('Raw data retrieved successfully')
+
+            # Steg 2: Filtrera och bearbeta rådata
+            filtered_data = filter_trafikverket_data(raw_data, start_time=start_time)
+            
+            logging.info('Data filtered successfully')
             return jsonify({
-                "total_situations": data["total_situations"],
-                "message_type_counts": data["message_type_counts"]
+                "total_situations": filtered_data["total_situations"],
+                "message_type_counts": filtered_data["message_type_counts"]
             })
         else:
             logging.error('No data found')
