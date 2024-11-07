@@ -45,7 +45,7 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          docker build . --file Dockerfile --tag "${{ secrets.DOCKER_USERNAME }}/flaskapp_trafic:$IMAGE_TAG" --build-arg API_KEY=${{ secrets.API_KEY }}
+          docker build . --file Dockerfile --tag "${{ secrets.DOCKER_USERNAME }}/flaskapp_trafic:$IMAGE_TAG"
 
       - name: Push Docker image to Docker Hub
         run: |
