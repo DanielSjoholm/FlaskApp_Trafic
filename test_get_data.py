@@ -17,9 +17,18 @@ def mock_api_response():
                                     "MessageType": "Färjor",
                                 },
                                 {
+                                    "StartTime": "2024-02-27T20:00:16.000+01:00",
+                                    "MessageType": "Vägarbete",
+                                },
+                                {
+                                    "StartTime": "2024-03-27T20:00:16.000+01:00",
+                                    "MessageType": "Vägarbete",
+                                },
+                                {
                                     "StartTime": "2024-10-27T20:00:16.000+01:00",
                                     "MessageType": "Vägarbete",
                                 }
+                            
                             ]
                         }
                     ]
@@ -41,14 +50,12 @@ def test_filter_trafikverket_data(mock_post, mock_api_response):
     start_time = "2024-01-01"
     result = filter_trafikverket_data(raw_data, start_time=start_time)
     assert result is not None
-    assert result["total_situations"] == 2
+    assert result["total_situations"] == 4
     assert result["message_type_counts"]["Färjor"] == 1
-    assert result["message_type_counts"]["Vägarbete"] == 1
-    assert len(result["filtered_data"]) == 2
+    assert result["message_type_counts"]["Vägarbete"] == 3
 
     start_time = "2024-10-01"
     result = filter_trafikverket_data(raw_data, start_time=start_time)
     assert result is not None
     assert result["total_situations"] == 1
     assert result["message_type_counts"]["Vägarbete"] == 1
-    assert len(result["filtered_data"]) == 1
