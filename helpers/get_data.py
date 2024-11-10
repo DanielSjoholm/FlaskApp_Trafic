@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-#api_key = os.getenv("API_KEY")
+api_key = os.getenv("API_KEY")
 #api_key = '5c341f5a9438482ca26b412a7c146cea'
 
 def get_trafikverket_data():
