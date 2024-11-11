@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from helpers.get_data import get_trafikverket_data
 from helpers.filter_data import filter_trafikverket_data
 
+
 @pytest.fixture
 def mock_api_response():
     return {
@@ -28,7 +29,6 @@ def mock_api_response():
                                     "StartTime": "2024-10-27T20:00:16.000+01:00",
                                     "MessageType": "Vägarbete",
                                 }
-                            
                             ]
                         }
                     ]
@@ -36,6 +36,7 @@ def mock_api_response():
             ]
         }
     }
+
 
 @patch("requests.post")
 def test_filter_trafikverket_data(mock_post, mock_api_response):

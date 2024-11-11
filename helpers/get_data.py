@@ -3,8 +3,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
 api_key = os.getenv("API_KEY")
-#api_key = '5c341f5a9438482ca26b412a7c146cea'
+
 
 def get_trafikverket_data():
     url = 'https://api.trafikinfo.trafikverket.se/v2/data.json'
@@ -23,3 +24,4 @@ def get_trafikverket_data():
     else:
         print(f"Fel vid hämtning av data: {response.status_code}")
         return None
+
