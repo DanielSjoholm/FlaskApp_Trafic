@@ -37,7 +37,8 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
         id: pytest
         run: |
-          python -m pytest 2>&1 | tee pytest.log  # Skapa en loggfil
+          python -m pytest 2>&1 | tee pytest.log
+          if [ $? -ne 0 ]; then exit 1; fi
 
       - name: Upload log if tests fail and logging enabled
         if: failure() && github.event.inputs.log_errors == 'true'
