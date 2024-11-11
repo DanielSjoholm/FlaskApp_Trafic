@@ -15,7 +15,9 @@ def filter_trafikverket_data(data, start_time=None):
             for deviation in situation.get('Deviation', []):
                 deviation_start_time_str = deviation.get("StartTime", "")
                 if deviation_start_time_str:
-                    deviation_start_time = datetime.strptime(deviation_start_time_str, "%Y-%m-%dT%H:%M:%S.%f%z").replace(tzinfo=None)
+                    deviation_start_time = datetime.strptime(
+                        deviation_start_time_str, "%Y-%m-%dT%H:%M:%S.%f%z"
+                    ).replace(tzinfo=None)
 
                     if start_time is None or deviation_start_time >= start_time:
                         filtered_data.append(deviation)

@@ -24,4 +24,3 @@ def get_trafikverket_data():
     else:
         print(f"Fel vid hämtning av data: {response.status_code}")
         return None
-

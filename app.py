@@ -21,17 +21,12 @@ def index():
 def get_data():
     start_time = request.args.get('start_time')
     logging.info(f'Received request for get_data with start_time: {start_time}')
-    
     try:
-        # Steg 1: Hämta rådata från API
         raw_data = get_trafikverket_data()
-        
         if raw_data:
             logging.info('Raw data retrieved successfully')
 
-            # Steg 2: Filtrera och bearbeta rådata
             filtered_data = filter_trafikverket_data(raw_data, start_time=start_time)
-            
             logging.info('Data filtered successfully')
             return jsonify({
                 "total_situations": filtered_data["total_situations"],
