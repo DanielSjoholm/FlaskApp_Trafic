@@ -16,10 +16,13 @@ def get_trafikverket_data():
         </QUERY>
     </REQUEST>
     """
-    response = requests.post(url, data=payload, headers={'Content-Type': 'text/xml'})
+    response = requests.post(url, data=payload, headers={'Content-Type': 'text/xml'}, verify=False)
 
     if response.status_code == 200:
         return response.json()
     else:
         print(f"Fel vid hämtning av data: {response.status_code}")
         return None
+    
+
+print(get_trafikverket_data())
