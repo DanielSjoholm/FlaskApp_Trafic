@@ -11,9 +11,11 @@ CORS(app)
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/get_data')
 def get_data():
@@ -41,6 +43,7 @@ def get_data():
     except Exception as e:
         logging.error(f'Error occurred: {e}')
         return jsonify({"error": "An error occurred while processing your request."}), 500
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80)
