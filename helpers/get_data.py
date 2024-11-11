@@ -16,7 +16,7 @@ def get_trafikverket_data():
         </QUERY>
     </REQUEST>
     """
-    response = requests.post(url, data=payload, headers={'Content-Type': 'text/xml'}, verify=False)
+    response = requests.post(url, data=payload, headers={'Content-Type': 'text/xml'}, verify=True)
 
     if response.status_code == 200:
         return response.json()
