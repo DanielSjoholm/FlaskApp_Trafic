@@ -45,7 +45,11 @@ jobs:
         id: pytest
         run: |
           python -m pytest --maxfail=1 --disable-warnings 2>&1 | tee pytest.log
-          if [ $? -ne 0 ]; then exit 1; fi
+          pytest_exit_code=${PIPESTATUS[0]}  # Hämtar exit-koden från pytest
+          if [ $pytest_exit_code -ne 0 ]; then
+            echo "Tests failed. Exiting with code 1."
+            exit 1  # Tvingar pipelinen att misslyckas om testerna misslyckas
+          fi
 
       - name: Upload log if tests fail and logging enabled
         if: failure() && github.event.inputs.log_errors == 'true'
