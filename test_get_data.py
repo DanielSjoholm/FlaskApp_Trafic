@@ -50,7 +50,7 @@ def test_filter_trafikverket_data(mock_post, mock_api_response):
     start_time = "2024-01-01"
     result = filter_trafikverket_data(raw_data, start_time=start_time)
     assert result is not None
-    assert result["total_situations"] == 1
+    assert result["total_situations"] == 4
     assert result["message_type_counts"]["Färjor"] == 1
     assert result["message_type_counts"]["Vägarbete"] == 3
 
